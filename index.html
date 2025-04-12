@@ -1,0 +1,435 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ansible: Domine a Automação em TI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- CSS base do Reveal.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <!-- Tema "black" do Reveal.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    <!-- Tema para Highlight.js (realce de sintaxe) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    
+    <!-- CSS customizado para ajustar os blocos de código -->
+    <style>
+      /* Força a cor do texto dos blocos de código para que fique legível sobre o fundo claro */
+      .reveal pre,
+      .reveal code {
+        color: #333 !important;
+      }
+      .reveal pre {
+        background-color: #f5f5f5 !important;
+        padding: 1em;
+        border-radius: 5px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- Slide 1: Capa -->
+        <section>
+          <h1>Ansible: Domine a Automação em TI</h1>
+          <h3>Elton Laice - 12/04/2025</h3>
+          <p>Email: <a href="mailto:elton@olenvocodespace.com">elton@olenvocodespace.com</a></p>
+        </section>
+
+        <!-- Slide 2: Agenda -->
+        <section>
+          <h2>Agenda</h2>
+          <ul>
+            <li>Introdução ao Ansible</li>
+            <li>Inventário</li>
+            <li>Playbooks</li>
+            <li>Módulos</li>
+            <li>Handlers e Variáveis</li>
+            <li>Templates e Jinja2</li>
+            <li>Roles</li>
+            <li>Estratégias de Execução</li>
+            <li>Exemplos Avançados</li>
+            <li>Boas Práticas</li>
+            <li>Desafios e Soluções</li>
+            <li>Agradecimentos</li>
+          </ul>
+        </section>
+
+        <!-- Slide 3: Introdução ao Ansible -->
+        <section>
+          <h2>Introdução ao Ansible</h2>
+          <p>
+            Ansible é uma ferramenta open-source para automação que permite configurar e gerenciar sistemas de forma eficiente, sem a necessidade de instalar agentes em cada nó.
+          </p>
+        </section>
+
+        <!-- Slide 4: Características do Ansible -->
+        <section>
+          <h2>Características do Ansible</h2>
+          <ul>
+            <li>Agentless (sem agentes)</li>
+            <li>Interface simples com YAML</li>
+            <li>Escalável e flexível</li>
+            <li>Comunicação via SSH</li>
+          </ul>
+        </section>
+
+        <!-- Slide 5: Arquitetura do Ansible -->
+        <section>
+          <h2>Arquitetura do Ansible</h2>
+          <p>
+            O Ansible utiliza um modelo centralizado, onde o controlador se comunica com os nós gerenciados via SSH usando módulos que executam tarefas específicas.
+          </p>
+        </section>
+
+        <!-- Slide 6: Inventário: Conceito -->
+        <section>
+          <h2>Inventário</h2>
+          <p>
+            O inventário é um arquivo que lista todos os hosts que serão gerenciados pelo Ansible.
+          </p>
+        </section>
+
+        <!-- Slide 7: Inventário Estático -->
+        <section>
+          <h2>Inventário Estático</h2>
+          <p>Exemplo de arquivo de inventário estático:</p>
+          <pre><code class="yaml">[webservers]
+192.168.1.10
+192.168.1.11
+
+[dbservers]
+192.168.1.20
+192.168.1.21</code></pre>
+        </section>
+
+        <!-- Slide 8: Inventário Dinâmico -->
+        <section>
+          <h2>Inventário Dinâmico</h2>
+          <p>
+            Um inventário dinâmico pode ser gerado automaticamente via scripts ou por integrações com provedores de cloud.
+          </p>
+        </section>
+
+        <!-- Slide 9: Conexões SSH -->
+        <section>
+          <h2>Conexões SSH</h2>
+          <p>
+            O Ansible utiliza conexões SSH para se comunicar com os nós, dispensando a instalação de agentes.
+          </p>
+        </section>
+
+        <!-- Slide 10: Introdução aos Playbooks -->
+        <section>
+          <h2>Introdução aos Playbooks</h2>
+          <p>
+            Playbooks são arquivos em YAML que descrevem as tarefas a serem executadas nos hosts. Eles orquestram as ações em sua infraestrutura.
+          </p>
+        </section>
+
+        <!-- Slide 11: Estrutura de um Playbook -->
+        <section>
+          <h2>Estrutura de um Playbook</h2>
+          <ul>
+            <li><strong>name:</strong> Nome do play</li>
+            <li><strong>hosts:</strong> Seleciona os nós-alvo</li>
+            <li><strong>tasks:</strong> Lista das tarefas a serem executadas</li>
+          </ul>
+        </section>
+
+        <!-- Slide 12: Exemplo Básico de Playbook -->
+        <section>
+          <h2>Exemplo de Playbook</h2>
+          <pre><code class="yaml">- name: Instalar Apache e configurar serviço
+  hosts: webservers
+  become: true
+  tasks:
+    - name: Instalar pacote Apache
+      apt:
+        name: apache2
+        state: present
+    - name: Iniciar serviço Apache
+      service:
+        name: apache2
+        state: started</code></pre>
+        </section>
+
+        <!-- Slide 13: Módulos do Ansible -->
+        <section>
+          <h2>Módulos</h2>
+          <p>
+            Módulos são pequenos programas que executam tarefas específicas, como gerenciar pacotes, arquivos ou serviços.
+          </p>
+          <ul>
+            <li>apt / yum</li>
+            <li>copy / template</li>
+            <li>service</li>
+            <li>shell / command</li>
+          </ul>
+        </section>
+
+        <!-- Slide 14: Handlers -->
+        <section>
+          <h2>Handlers</h2>
+          <p>
+            Handlers são tarefas especiais executadas apenas quando notificadas por outra tarefa que alterou o estado.
+          </p>
+          <pre><code class="yaml">- name: Reiniciar Apache
+  service:
+    name: apache2
+    state: restarted
+
+- name: Atualizar configuração e notificar reinício
+  copy:
+    src: apache.conf
+    dest: /etc/apache2/apache2.conf
+  notify: Reiniciar Apache</code></pre>
+        </section>
+
+        <!-- Slide 15: Variáveis e Fatos -->
+        <section>
+          <h2>Variáveis e Fatos</h2>
+          <p>
+            Variáveis permitem parametrizar playbooks e os "facts" são dados coletados automaticamente dos hosts.
+          </p>
+        </section>
+
+        <!-- Slide 16: Exemplo de Variáveis -->
+        <section>
+          <h2>Exemplo de Uso de Variáveis</h2>
+          <pre><code class="yaml">- name: Exibir informações do sistema
+  hosts: all
+  tasks:
+    - debug:
+        msg: "Distribuição: {{ ansible_distribution }} - Versão: {{ ansible_distribution_version }}"</code></pre>
+        </section>
+
+        <!-- Slide 17: Controle de Fluxo com Condicionais -->
+        <section>
+          <h2>Condicionais</h2>
+          <p>
+            Utilize condicionais para executar tarefas somente se certas condições forem satisfeitas.
+          </p>
+          <pre><code class="yaml">- name: Instalar pacote específico no Ubuntu
+  apt:
+    name: pacote-ubuntu
+    state: present
+  when: ansible_distribution == "Ubuntu"</code></pre>
+        </section>
+
+        <!-- Slide 18: Laços de Repetição -->
+        <section>
+          <h2>Laços de Repetição</h2>
+          <p>
+            Use loops para iterar sobre listas de itens.
+          </p>
+          <pre><code class="yaml">- name: Criar diretórios
+  file:
+    path: "/tmp/{{ item }}"
+    state: directory
+  loop:
+    - dir1
+    - dir2
+    - dir3</code></pre>
+        </section>
+
+        <!-- Slide 19: Templates e Jinja2 -->
+        <section>
+          <h2>Templates com Jinja2</h2>
+          <p>
+            Os templates permitem criar arquivos de configuração dinâmicos a partir de modelos escritos em Jinja2.
+          </p>
+        </section>
+
+        <!-- Slide 20: Exemplo de Template Jinja2 -->
+        <section>
+          <h2>Exemplo de Template Jinja2</h2>
+          <p>Arquivo: <code>templates/vhost.conf.j2</code></p>
+          <pre><code class="jinja2">&lt;VirtualHost *:80&gt;
+    ServerName {{ server_name }}
+    DocumentRoot {{ document_root }}
+&lt;/VirtualHost&gt;</code></pre>
+        </section>
+
+        <!-- Slide 21: Aplicando um Template -->
+        <section>
+          <h2>Aplicando um Template</h2>
+          <pre><code class="yaml">- name: Configurar vhost com template
+  template:
+    src: templates/vhost.conf.j2
+    dest: /etc/apache2/sites-available/{{ server_name }}.conf</code></pre>
+        </section>
+
+        <!-- Slide 22: Roles -->
+        <section>
+          <h2>Roles</h2>
+          <p>
+            Roles organizam playbooks de forma modular, facilitando a reutilização e a manutenção do código.
+          </p>
+        </section>
+
+        <!-- Slide 23: Estrutura de uma Role -->
+        <section>
+          <h2>Estrutura de uma Role</h2>
+          <pre><code class="shell">role_name/
+├── tasks/
+│   └── main.yml
+├── handlers/
+│   └── main.yml
+├── templates/
+│   └── arquivo.conf.j2
+├── files/
+├── vars/
+│   └── main.yml
+└── defaults/
+    └── main.yml</code></pre>
+        </section>
+
+        <!-- Slide 24: Utilizando Roles em Playbooks -->
+        <section>
+          <h2>Utilizando Roles</h2>
+          <pre><code class="yaml">- name: Aplicar role "webserver"
+  hosts: webservers
+  roles:
+    - webserver</code></pre>
+        </section>
+
+        <!-- Slide 25: Estratégias de Execução -->
+        <section>
+          <h2>Estratégias de Execução</h2>
+          <p>
+            Configure a execução dos playbooks (paralela, serial, etc.) conforme a necessidade do ambiente.
+          </p>
+        </section>
+
+        <!-- Slide 26: Execução em Modo Check -->
+        <section>
+          <h2>Modo Check (Dry Run)</h2>
+          <p>
+            Execute o playbook em modo simulação, sem aplicar alterações reais:
+          </p>
+          <pre><code class="shell">ansible-playbook playbook.yml --check</code></pre>
+        </section>
+
+        <!-- Slide 27: Debug e Logs -->
+        <section>
+          <h2>Debug e Logs</h2>
+          <p>
+            Utilize o módulo debug e registre logs para identificar possíveis problemas nos playbooks.
+          </p>
+          <pre><code class="yaml">- debug:
+    msg: "Valor da variável: {{ variavel }}"</code></pre>
+        </section>
+
+        <!-- Slide 28: Integração com Git -->
+        <section>
+          <h2>Integração com Git</h2>
+          <p>
+            Versione seus playbooks e roles utilizando o Git, facilitando a colaboração e a manutenção do código.
+          </p>
+          <pre><code class="shell">git init
+git add .
+git commit -m "Versão inicial dos playbooks do Ansible"</code></pre>
+        </section>
+
+        <!-- Slide 29: Automação de Deploys -->
+        <section>
+          <h2>Automação de Deploys</h2>
+          <p>
+            O Ansible orquestra deploys completos de aplicações, unificando várias tarefas e roles para garantir uma implantação consistente.
+          </p>
+        </section>
+
+        <!-- Slide 30: Exemplo Avançado de Playbook -->
+        <section>
+          <h2>Exemplo Avançado de Playbook</h2>
+          <pre><code class="yaml">- name: Deploy de Aplicação Web com Balanceamento
+  hosts: webservers
+  become: true
+  vars:
+    app_version: "1.2.3"
+  tasks:
+    - name: Atualizar código da aplicação
+      git:
+        repo: "https://github.com/exemplo/app.git"
+        dest: /var/www/app
+        version: "{{ app_version }}"
+    - name: Configurar ambiente
+      include_role:
+        name: configuracao_app
+    - name: Reiniciar serviço da aplicação
+      service:
+        name: app_service
+        state: restarted</code></pre>
+        </section>
+
+        <!-- Slide 31: Boas Práticas -->
+        <section>
+          <h2>Boas Práticas</h2>
+          <ul>
+            <li>Mantenha playbooks simples e modulares</li>
+            <li>Organize o código com roles</li>
+            <li>Utilize versionamento (Git) para seus arquivos</li>
+            <li>Teste em ambientes seguros antes de aplicar em produção</li>
+          </ul>
+        </section>
+
+        <!-- Slide 32: Desafios e Soluções -->
+        <section>
+          <h2>Desafios e Soluções</h2>
+          <ul>
+            <li>Gerenciamento de variáveis em múltiplos níveis</li>
+            <li>Manutenção de inventário dinâmico</li>
+            <li>Depuração de playbooks complexos</li>
+          </ul>
+        </section>
+
+        <!-- Slide 33: Dicas de Estudo -->
+        <section>
+          <h2>Dicas de Estudo</h2>
+          <ul>
+            <li>Pratique em ambientes de teste</li>
+            <li>Acompanhe a documentação oficial</li>
+            <li>Participe de fóruns e comunidades sobre automação</li>
+          </ul>
+        </section>
+
+        <!-- Slide 34: Conclusão e Perguntas -->
+        <section>
+          <h2>Conclusão e Perguntas</h2>
+          <p>
+            Recapitulamos os principais conceitos do Ansible e vimos exemplos práticos.  
+            A prática contínua é essencial para dominar a automação com Ansible.
+          </p>
+          <p>Obrigado pela atenção!<br>Vamos para as perguntas.</p>
+        </section>
+
+        <!-- Slide 35: Agradecimentos -->
+        <section>
+          <h2>Agradecimentos</h2>
+          <p>
+            Apresentação preparada por Elton Laice - 12/04/2025.
+          </p>
+        </section>
+
+      </div>
+    </div>
+    
+    <!-- Inclusão dos scripts do Reveal.js e do plugin de Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        plugins: [ RevealHighlight ],
+        controls: true,
+        progress: true,
+        center: true,
+        transition: 'slide',
+        slideNumber: true
+      });
+    </script>
+  </body>
+</html>
